@@ -6,20 +6,38 @@ import { generateToken } from "../utils/jwt";
 const users: any[] = [];
 
 export const register = async (req: Request, res: Response) => {
-    const { email, password, role } = req.body;
+    try {
+        const { email, password, role } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+        // 1️⃣ Validate input
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password required" });
+        }
 
-    const newUser = {
-        id: users.length + 1,
-        email,
-        password: hashedPassword,
-        role: role || "member", // default role
-    };
+        // 2️⃣ Check for duplicate email
+        const existingUser = users.find((u) => u.email === email);
+        if (existingUser) {
+            return res.status(409).json({ message: "User already exists" });
+        }
 
-    users.push(newUser);
+        // 3️⃣ Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    res.status(201).json({ message: "User registered" });
+        const newUser = {
+            id: users.length + 1,
+            email,
+            password: hashedPassword,
+            role: role || "member",
+        };
+
+        users.push(newUser);
+
+        return res.status(201).json({ message: "User registered" });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Server error" });
+    }
 };
 
 export const login = async (req: Request, res: Response) => {
