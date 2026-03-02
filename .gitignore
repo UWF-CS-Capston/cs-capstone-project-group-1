@@ -1,0 +1,16 @@
+# Node
+node_modules/
+Backend/node_modules/
+
+# Logs
+*.log
+
+# Env
+.env
+
+# Build output
+dist/
+Backend/dist/
+
+# OS
+.DS_Store
