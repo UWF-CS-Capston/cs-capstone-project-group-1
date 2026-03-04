@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import FormButton from '../../components/buttons/formButtons';
 import FormView from '../../components/views/formView';
 
-const isAuthenticated = true; // Placeholder for authentication state
+const isAuthenticated: boolean = true; // Placeholder for authentication state
 
 export default function Scan() {
 
