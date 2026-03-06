@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -6,27 +7,14 @@ import authRoutes from "./routes/auth";
 import qrRoutes from "./routes/qr";
 import { authenticate, authorize } from "./middleware/authMiddleware";
 import rateLimit from "express-rate-limit";
-
 const app = express();
 
 app.use(helmet());
 
-// ✅ CORS MUST COME BEFORE ROUTES
-app.use(
-    cors({
-        origin: "http://localhost:8081",
-        credentials: true,
-    })
-);
-
-// Explicitly handle preflight
-app.options("*", cors({
+app.use(cors({
     origin: "http://localhost:8081",
     credentials: true,
 }));
-
-app.options("*", cors());
-
 app.use(express.json());
 
 const authLimiter = rateLimit({
