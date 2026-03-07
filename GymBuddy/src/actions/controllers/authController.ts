@@ -45,7 +45,7 @@ export const register = async (req: Request, res: Response) => {
         await query(
             `INSERT INTO users (email, password_hash, role)
              VALUES ($1, $2, $3)`,
-            [email, hashedPassword, "member"]
+            [email, hashedPassword, "member"] // 🔥 never trust client role
         );
 
         return res.status(201).json({ message: "User registered" });
