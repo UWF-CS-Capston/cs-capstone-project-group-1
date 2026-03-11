@@ -8,7 +8,7 @@ export default function Index() {
             <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
                 Welcome to GymBuddy! Please login to continue.
             </Text>
-            <Link push href="Login" style={{ marginTop: 20, fontSize: 18, color: 'blue' }}>
+            <Link push href="/account/loginForm" style={{ marginTop: 20, fontSize: 18, color: 'blue' }}>
                 Go to Login
             </Link>
         </MainView>

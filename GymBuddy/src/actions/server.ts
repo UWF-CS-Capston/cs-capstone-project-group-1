@@ -6,6 +6,7 @@ import helmet from "helmet";
 import authRoutes from "./routes/auth";
 import qrRoutes from "./routes/qr";
 import { authenticate, authorize } from "./middleware/authMiddleware";
+import { testDatabaseConnection } from "./db";
 import rateLimit from "express-rate-limit";
 const app = express();
 
@@ -47,6 +48,18 @@ app.get(
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await testDatabaseConnection();
+        console.log("Connected to PostgreSQL");
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Failed to connect to PostgreSQL", error);
+        process.exit(1);
+    }
+};
+
+void startServer();

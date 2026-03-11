@@ -2,9 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/jwt";
 import validator from "validator";
-
-// Temporary in-memory store (we’ll replace with PostgreSQL later)
-const users: any[] = [];
+import { query } from "../db";
 
 export const register = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -32,36 +30,57 @@ export const register = async (req: Request, res: Response) => {
         });
     }
 
-    // Check if user already exists
-    const existingUser = users.find((u) => u.email === email);
-    if (existingUser) {
-        return res.status(409).json({ message: "User already exists" });
+    try {
+        const existingUser = await query(
+            "SELECT id FROM users WHERE email = $1 LIMIT 1",
+            [email]
+        );
+
+        if (existingUser.rowCount && existingUser.rowCount > 0) {
+            return res.status(409).json({ message: "User already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await query(
+            `INSERT INTO users (email, password_hash, role)
+             VALUES ($1, $2, $3)`,
+            [email, hashedPassword, "member"] // 🔥 never trust client role
+        );
+
+        return res.status(201).json({ message: "User registered" });
+    } catch (error: any) {
+        // Handle race condition on unique email constraint.
+        if (error?.code === "23505") {
+            return res.status(409).json({ message: "User already exists" });
+        }
+
+        return res.status(500).json({ message: "Registration failed" });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = {
-        id: users.length + 1,
-        email,
-        password: hashedPassword,
-        role: "member", // 🔥 never trust client role
-    };
-
-    users.push(newUser);
-
-    res.status(201).json({ message: "User registered" });
 };
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const user = users.find((u) => u.email === email);
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    try {
+        const result = await query(
+            `SELECT id, password_hash, role
+             FROM users
+             WHERE email = $1
+             LIMIT 1`,
+            [email]
+        );
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+        const user = result.rows[0];
+        if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = generateToken(user.id, user.role);
+        const isMatch = await bcrypt.compare(password, user.password_hash);
+        if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    res.json({ token });
+        const token = generateToken(user.id, user.role);
+
+        return res.json({ token });
+    } catch {
+        return res.status(500).json({ message: "Login failed" });
+    }
 };
