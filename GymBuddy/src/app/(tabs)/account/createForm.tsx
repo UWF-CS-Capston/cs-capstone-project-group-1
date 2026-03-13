@@ -3,7 +3,6 @@ import { Text, View } from 'react-native';
 import FormField from '../../../components/inputFields/inputField';
 import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
-import NavButton from '../../../components/buttons/navButton';
 import { router } from 'expo-router';
 import MainView from '../../../components/views/mainView';
 
@@ -13,6 +12,31 @@ export default function CreateForm() {
     const [password, setPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [message, setMessage] = React.useState("");
+
+    const handleCreateAccount = async () => {
+        if (password !== confirmPassword) {
+            setMessage("Passwords do not match");
+            return;
+        }
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, name, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setMessage("Account created successfully ✅");
+                router.push('/account/loginForm');
+            } else {
+                setMessage(data.message || "Failed to create account.");
+            }
+        } catch (error) {
+            setMessage("Failed to create account.");
+
+        }
+    };
 
     return (
         <MainView>

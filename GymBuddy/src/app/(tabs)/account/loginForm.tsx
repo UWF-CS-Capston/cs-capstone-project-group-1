@@ -25,10 +25,10 @@ export default function LoginForm() {
                 localStorage.setItem("token", data.token);
                 router.push('/account');
             } else {
-                setMessage(data.message || "Login failed ❌");
+                setMessage(data.message || "Login failed. Username or password may be incorrect.");
             }
         } catch (error) {
-            setMessage("Login failed ❌");
+            setMessage("Login failed: ");
         }
     };
     
