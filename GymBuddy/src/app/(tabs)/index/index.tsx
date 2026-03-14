@@ -9,21 +9,19 @@ export default function Index() {
             <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
                 Welcome to GymBuddy! Please login to continue.
             </Text>
-            <View style={{ 
-                flexDirection: 'row', 
-                justifyContent: 'center', 
-                width: '100%', 
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                width: '100%',
                 marginTop: 20
-                }} >
+            }} >
 
-                <NavButton title="Go to Account" onPress={() => {
-                    router.push('/account');
-                }} />
-                <NavButton title="Go to Machine View" onPress={() => {
-                    router.push('/machinePage');
+                <NavButton title="Go to Account" to="/account" />
+
+                <NavButton title="Go to Machine View" to="/machinePage" />
                 }} />
             </View>
-            
+
         </MainView>
     );
 }
