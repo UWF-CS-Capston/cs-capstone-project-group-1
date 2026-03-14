@@ -1,11 +1,16 @@
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
 
-export default function NavButton({ to, title }: { to: string; title: string }) {
+interface NavButtonProps {
+    title: string;
+    onPress?: () => void;
+}
+
+export default function NavButton({ title, onPress }: NavButtonProps) {
   const router = useRouter();
     return (
     <View style={styles.button}>
-        <Pressable onPress={() => router.replace(to)}>
+        <Pressable onPress={onPress}>
             <Text style={styles.buttonText}>{title}</Text>
         </Pressable>
     </View>
@@ -14,7 +19,7 @@ export default function NavButton({ to, title }: { to: string; title: string }) 
 
 const styles = StyleSheet.create({
     button: {
-        width: 100,
+        width: 200,
         padding: 10,
         borderWidth: 1,
         borderColor: '#09eba3',
