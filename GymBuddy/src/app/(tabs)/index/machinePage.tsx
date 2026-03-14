@@ -18,10 +18,10 @@ export default function MachinePage() {
                 margin: 20
                 }} >
                     <MachineView title="Bench Press" machines={5} inUse={1} onPress={ () => {
-                        Alert.alert("machine view unavalible")
+                        
                     }}/>
                     <MachineView title="Treadmill" machines={10} inUse={4} onPress={ () => {
-                        Alert.alert("machine view unabalible")
+                        
                     }}/>
                 </View>
             <NavButton title="Return to home" onPress={ () => {
