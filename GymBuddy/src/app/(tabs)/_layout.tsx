@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import React from "react";
 
 export default function RootLayout() {
     return (
@@ -15,33 +16,39 @@ export default function RootLayout() {
                 tabBarAllowFontScaling: true,
             }}
         >
-            <Tabs.Screen name="index" options={{ 
+            <Tabs.Screen
+                name="machines"
+                options={{
+                    title: "Machines",
+                }}
+            />
+            <Tabs.Screen name="index" options={{
                 title: "Home",
                 tabBarIcon: ({ focused, color, size }) => (
                     <Ionicons name={focused ? 'home-sharp' : 'home-outline'} size={size} color={color} />
-                ),     
-                }} 
+                ),
+            }}
             />
-            <Tabs.Screen name="scan" options={{ 
+            <Tabs.Screen name="scan" options={{
                 title: "Scan",
                 tabBarIcon: ({ focused, color, size }) => (
                     <Ionicons name={focused ? 'qr-code-sharp' : 'qr-code-outline'} size={24} color={color} />
-                ),     
-                }} 
+                ),
+            }}
             />
-            <Tabs.Screen name="account" options={{ 
-                title: "Account", 
+            <Tabs.Screen name="account" options={{
+                title: "Account",
                 tabBarIcon: ({ focused, color, size }) => (
                     <Ionicons name={focused ? 'person-sharp' : 'person-outline'} size={size} color={color} />
                 ),
-                }} 
+            }}
             />
-            <Tabs.Screen name="settings" options={{ 
-                title: "Settings", 
+            <Tabs.Screen name="settings" options={{
+                title: "Settings",
                 tabBarIcon: ({ focused, color, size }) => (
                     <Ionicons name={focused ? 'settings-sharp' : 'settings-outline'} size={size} color={color} />
-                ), 
-                }} 
+                ),
+            }}
             />
         </Tabs>
     );

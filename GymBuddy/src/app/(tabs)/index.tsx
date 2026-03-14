@@ -1,6 +1,7 @@
 import { Text } from "react-native";
 import { Link } from "expo-router";
 import MainView from "../../components/views/mainView";
+import React from "react";
 
 export default function Index() {
     return (

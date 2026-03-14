@@ -12,6 +12,12 @@ export default function LoginForm() {
     const [message, setMessage] = React.useState("");
 
     const handleLogin = async () => {
+        if (!email || !password) {
+            setMessage("Please enter both email and password.");
+            return;
+        }
+
+        console.log("Attempting login with:", { email, password });
         try {
             const res = await fetch("http://localhost:5000/api/auth/login", {
                 method: "POST",
@@ -19,7 +25,16 @@ export default function LoginForm() {
                 body: JSON.stringify({ email, password })
             });
 
-            const data = await res.json();
+            const text = await res.text();
+            console.log("Login response status:", res.status);
+            console.log("Login response body:", text);
+
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                data = { message: text };
+            }
             if (res.ok) {
                 setMessage("Login successful ✅");
                 localStorage.setItem("token", data.token);
@@ -31,14 +46,14 @@ export default function LoginForm() {
             setMessage("Login failed: ");
         }
     };
-    
+
     return (
         <MainView>
             <FormView>
                 <FormField placeholder="Email" value={email} onChange={setEmail} />
                 <FormField placeholder="Password" value={password} onChange={setPassword} secureTextEntry />
-                <View style ={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
-                    <FormButton title="Sign Up" onPress={ () => router.push('/account/createForm')} />
+                <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                    <FormButton title="Sign Up" onPress={() => router.push('/account/createForm')} />
                     <FormButton title="Login" onPress={() => {
                         handleLogin();
                     }} />
