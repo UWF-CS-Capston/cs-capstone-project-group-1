@@ -1,7 +1,12 @@
 import { Tabs } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useAuth } from '../../contexts/AuthContext';
+
 
 export default function RootLayout() {
+    const { role, isLoading } = useAuth();
+    const isStaff = role === 'staff' || role === 'admin';
+
     return (
         <Tabs
             screenOptions={{
@@ -29,6 +34,15 @@ export default function RootLayout() {
                 ),     
                 }} 
             />
+                  {isStaff && (
+        <Tabs.Screen name="employee" options={{
+          title: "Employee",
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons name={focused ? 'people-sharp' : 'people-outline'} size={size} color={color} />
+                ),
+                }} 
+            />
+            )}
             <Tabs.Screen name="account" options={{ 
                 title: "Account", 
                 tabBarIcon: ({ focused, color, size }) => (
