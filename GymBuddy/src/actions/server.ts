@@ -24,7 +24,6 @@ const authLimiter = rateLimit({
     message: "Too many auth attempts. Try again later.",
 });
 
-// ✅ Now mount routes AFTER middleware
 app.use("/api/auth", authLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/qr", qrRoutes);
@@ -62,4 +61,8 @@ const startServer = async () => {
     }
 };
 
-void startServer();
+export default app;
+
+if (process.env.NODE_ENV !== "test") {
+    void startServer();
+}
