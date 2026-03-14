@@ -15,7 +15,7 @@ export default function NavButton({ to, title }: { to: string; title: string }) 
 
 const styles = StyleSheet.create({
     button: {
-        width: 100,
+        width: 200,
         padding: 10,
         borderWidth: 1,
         borderColor: '#09eba3',
