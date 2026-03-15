@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, Pressable, StyleSheet } from 'react-native';
-import { Redirect } from 'expo-router';
 
 interface FormButtonProps {
     title: string;

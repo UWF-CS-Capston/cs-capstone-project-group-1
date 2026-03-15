@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import storage from '../utils/storage';
 
 interface AuthContextType {
   token: string | null;
@@ -18,31 +19,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Load token from storage on app start
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
+    const loadToken = async () => {
       try {
-        const decoded: any = jwtDecode(storedToken);
-        setToken(storedToken);
-        setRole(decoded.role);
+        const storedToken = await storage.getItem('token');
+        if (storedToken) {
+          try {
+            const decoded: any = jwtDecode(storedToken);
+            setToken(storedToken);
+            setRole(decoded.role);
+          } catch (error) {
+            console.error('Invalid token', error);
+            await storage.removeItem('token');
+          }
+        }
       } catch (error) {
-        console.error('Invalid token', error);
-        localStorage.removeItem('token');
+        console.error('Error loading token', error);
+      } finally {
+        setIsLoading(false);
       }
-    }
-    setIsLoading(false);
+    };
+
+    loadToken();
   }, []);
 
-  const login = (newToken: string) => {
-    localStorage.setItem('token', newToken);
-    const decoded: any = jwtDecode(newToken);
-    setToken(newToken);
-    setRole(decoded.role);
+  const login = async (newToken: string) => {
+    try {
+      await storage.setItem('token', newToken);
+      const decoded: any = jwtDecode(newToken);
+      setToken(newToken);
+      setRole(decoded.role);
+    } catch (error) {
+      console.error('Error saving token', error);
+    }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setToken(null);
-    setRole(null);
+  const logout = async () => {
+    try {
+      await storage.removeItem('token');
+      setToken(null);
+      setRole(null);
+    } catch (error) {
+      console.error('Error removing token', error);
+    }
   };
 
   return (

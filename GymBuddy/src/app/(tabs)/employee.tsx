@@ -14,10 +14,23 @@ const machines = [
 export default function EmployeeScreen() {
   const occupancy = 42; // static number for now
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Available':
+        return '#4CAF50'; // Green
+      case 'In Use':
+        return '#FF9800'; // Orange
+      case 'Maintenance':
+        return '#F44336'; // Red
+      default:
+        return '#055c49'; // Default dark green
+    }
+  };
+
   const renderMachine = ({ item }: { item: typeof machines[0] }) => (
     <View style={styles.machineCard}>
       <Text style={styles.machineName}>{item.name}</Text>
-      <Text style={[styles.status, { color: item.status === 'Available' ? 'green' : item.status === 'In Use' ? 'orange' : 'red' }]}>
+      <Text style={[styles.status, { color: getStatusColor(item.status) }]}>
         {item.status}
       </Text>
       <Text style={styles.queue}>Queue: {item.queue}</Text>
@@ -44,6 +57,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     marginVertical: 20,
+    width: '100%',
   },
   title: {
     fontSize: 24,
@@ -53,7 +67,7 @@ const styles = StyleSheet.create({
   occupancy: {
     fontSize: 18,
     marginTop: 5,
-    color: '#333',
+    color: '#055c49',
   },
   list: {
     paddingBottom: 20,
@@ -68,11 +82,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   machineName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#055c49',
+    color: '#055c49', // Dark green text
     flex: 2,
   },
   status: {
@@ -83,8 +102,9 @@ const styles = StyleSheet.create({
   },
   queue: {
     fontSize: 14,
-    color: '#055c49',
+    color: '#055c49', // Dark green text
     flex: 1,
     textAlign: 'right',
+    fontWeight: '500',
   },
 });

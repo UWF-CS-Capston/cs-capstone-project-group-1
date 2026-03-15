@@ -1,24 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { use } from 'react';
-import { Redirect } from 'expo-router';
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Button,
   StyleSheet,
   Text,
-  TextInput,
   Image,
   View,
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import FormButton from '../../components/buttons/formButtons';
 import FormField from '../../components/inputFields/inputField';
-// import FormField from '../components/inputField';
-// import FormButton from '../components/buttons';
+import NavButton from '../../components/buttons/navButton';
+import { apiFetch } from '../../utils/api';
+import storage from '../../utils/storage';
 
 export default function Index() {
-
-  
   const [qrImage, setQrImage] = useState("");
   const [qrCode, setQrCode] = useState("");
   const [expiresIn, setExpiresIn] = useState(0);
@@ -27,6 +23,24 @@ export default function Index() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [token, setToken] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check for existing token on mount
+  useEffect(() => {
+    const loadToken = async () => {
+      try {
+        const storedToken = await storage.getItem('token');
+        if (storedToken) {
+          setToken(storedToken);
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Error loading token:', error);
+      }
+    };
+    loadToken();
+  }, []);
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -48,10 +62,12 @@ export default function Index() {
   }, [timeLeft]);
 
   const register = async () => {
+    setIsLoading(true);
+    setMessage("");
+    
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await apiFetch('/api/auth/register', {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
 
@@ -59,51 +75,81 @@ export default function Index() {
 
       if (res.ok) {
         setMessage("Registered successfully ✅");
+        // Auto-fill email for login
       } else {
         setMessage(data.message || "Register failed ❌");
       }
-
     } catch (err) {
       console.log(err);
       setMessage("Error connecting to backend ❌");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const login = async () => {
+    setIsLoading(true);
+    setMessage("");
+    
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await apiFetch('/api/auth/login', {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
 
       const data = await res.json();
 
       if (res.ok && data.token) {
-        localStorage.setItem("token", data.token); // 🔥 store JWT
+        // Store token using cross-platform storage
+        await storage.setItem('token', data.token);
         setToken(data.token);
+        setIsAuthenticated(true);
         setMessage("Login successful ✅");
       } else {
         setMessage(data.message || "Login failed ❌");
       }
-
     } catch (err) {
       console.log(err);
       setMessage("Error connecting to backend ❌");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken("");
-    setMessage("Logged out");
-  };
-  const generateQR = async () => {
+  const logout = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/qr/generate", {
+      await storage.removeItem('token');
+      setToken("");
+      setIsAuthenticated(false);
+      setQrImage("");
+      setQrCode("");
+      setMessage("Logged out");
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const generateQR = async () => {
+    setIsLoading(true);
+    setMessage("");
+    
+    try {
+      // Get fresh token from storage
+      const currentToken = await storage.getItem('token');
+      
+      if (!currentToken) {
+        setMessage("Not authenticated. Please login again.");
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
+      
+      console.log('🔑 Using token:', { currentToken });
+      
+      const res = await apiFetch('/api/qr/generate', {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`, // 👈 use state token
+          Authorization: `Bearer ${currentToken}`,
         },
       });
 
@@ -116,48 +162,64 @@ export default function Index() {
         setExpiresIn(data.expiresIn);
         setTimeLeft(data.expiresIn);
         setMessage("QR generated successfully ✅");
+      } else {
+        setMessage(data.message || "Failed to generate QR");
+        // If unauthorized, log out
+        if (res.status === 401 || res.status === 403) {
+          await storage.removeItem('token');
+          setIsAuthenticated(false);
+        }
       }
-
     } catch (err) {
       console.log("Fetch error:", err);
-      alert("Error connecting to backend ❌");
+      Alert.alert("Error", "Failed to connect to server");
+    } finally {
+      setIsLoading(false);
     }
   };
+
   // If authenticated
-  if (token) {
+  if (isAuthenticated) {
     return (
       <View style={styles.container}>
-        <Text>Authenticated 🎉</Text>
-        <Text numberOfLines={1}>Token: {token}</Text>
+        <Text style={styles.title}>Authenticated 🎉</Text>
+        <Text style={styles.tokenText}>
+          Token: {token}
+        </Text>
 
-        <Button title="Generate QR" onPress={generateQR} />
+        <NavButton 
+          title={isLoading ? "Generating..." : "Generate QR"} 
+          onPress={generateQR} 
+        />
+        
         <View style={{ height: 15 }} />
+
+        {isLoading && <ActivityIndicator size="large" color="#055c49" />}
 
         {qrImage !== "" && (
           <>
             <Image
               source={{ uri: qrImage }}
-              style={{ width: 200, height: 200 }}
+              style={styles.qrImage}
             />
-            <Text style={{ marginTop: 10, fontSize: 18 }}>
-              Code: {qrCode}
-            </Text>
-            <Text style={{ marginTop: 5 }}>
+            <Text style={styles.codeText}>Code: {qrCode}</Text>
+            <Text style={styles.expiryText}>
               Expires in: {timeLeft} seconds
             </Text>
             <View style={{ height: 15 }} />
           </>
         )}
 
-        <Button title="Logout" onPress={logout} />
-        <Text style={{ marginTop: 10 }}>{message}</Text>
+        <NavButton title="Logout" onPress={logout} />
+        <Text style={styles.messageText}>{message}</Text>
       </View>
     );
   }
 
+  // Login/Register view
   return (
-    <View >
-      <Text style={{ fontSize: 20 }}>GymBuddy Auth</Text>
+    <View style={styles.authContainer}>
+      <Text style={styles.authTitle}>GymBuddy Auth</Text>
 
       <FormField
         placeholder="Email"
@@ -172,11 +234,21 @@ export default function Index() {
         onChange={setPassword}
       />
 
-      <FormButton title="Register" onPress={register} />
+      <FormButton 
+        title={isLoading ? "Loading..." : "Register"} 
+        onPress={register} 
+      />
+      
       <View style={{ height: 10 }} />
-      <FormButton title="Login" onPress={login} />
+      
+      <FormButton 
+        title={isLoading ? "Loading..." : "Login"} 
+        onPress={login} 
+      />
 
-      <Text style={{ marginTop: 15 }}>{message}</Text>
+      {isLoading && <ActivityIndicator style={{marginTop: 10}} size="small" color="#055c49" />}
+      
+      <Text style={styles.messageText}>{message}</Text>
 
       <StatusBar style="auto" />
     </View>
@@ -189,15 +261,53 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#06d3a7',
+    padding: 20,
   },
-  input: {
-    width: 300,
-    padding: 15,
-    borderWidth: 1,
+  authContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#06d3a7',
+    padding: 20,
   },
-  button: {
-    width: 100,
-    padding: 10,
-    borderWidth: 1,
-  }
-})
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#055c49',
+    marginBottom: 10,
+  },
+  authTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#055c49',
+    marginBottom: 30,
+  },
+  tokenText: {
+    fontSize: 12,
+    color: '#055c49',
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  qrImage: {
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  codeText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#055c49',
+    marginTop: 10,
+  },
+  expiryText: {
+    fontSize: 14,
+    color: '#055c49',
+    marginTop: 5,
+  },
+  messageText: {
+    marginTop: 15,
+    color: '#055c49',
+    textAlign: 'center',
+  },
+});

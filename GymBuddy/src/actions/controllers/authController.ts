@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../utils/jwt";
 import validator from "validator";
 import { query } from "../db";
+import { AuthRequest } from "../middleware/authMiddleware";
 
 export const register = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -41,6 +42,13 @@ export const register = async (req: Request, res: Response) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        // In the register function, you're setting role to "member"
+        await query(
+            `INSERT INTO users (email, password_hash, role)
+            VALUES ($1, $2, $3)`,
+            [email, hashedPassword, "member"] // This sets role to "member" for all new users
+        );
 
         await query(
             `INSERT INTO users (email, password_hash, role)
@@ -82,5 +90,29 @@ export const login = async (req: Request, res: Response) => {
         return res.json({ token });
     } catch {
         return res.status(500).json({ message: "Login failed" });
+    }
+};
+
+export const getUserInfo = async (req: AuthRequest, res: Response) => {
+    try {
+        const userId = req.user?.userId;
+        
+        const result = await query(
+            `SELECT id, email, role, created_at
+             FROM users
+             WHERE id = $1
+             LIMIT 1`,
+            [userId]
+        );
+
+        const user = result.rows[0];
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json({ user });
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        return res.status(500).json({ message: "Failed to fetch user info" });
     }
 };

@@ -10,7 +10,7 @@ const pool = new Pool(
                     : false,
         }
         : {
-            host: process.env.PGHOST || "localhost",
+            host: process.env.PGHOST || "192.168.1.182",
             port: Number(process.env.PGPORT || 5432),
             user: process.env.PGUSER || "postgres",
             password: process.env.PGPASSWORD,
