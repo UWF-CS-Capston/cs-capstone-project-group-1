@@ -14,3 +14,7 @@ Backend/dist/
 
 # OS
 .DS_Store
+
+# test coverage
+coverage/
+GymBuddy/coverage/

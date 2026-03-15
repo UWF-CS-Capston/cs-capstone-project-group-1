@@ -1,18 +1,28 @@
-import React from 'react';
-import { Text, Button} from 'react-native';
-import MainView from '../../../components/views/mainView';
-import { router } from 'expo-router';
-
-var isAuthenticated: boolean = false; // Placeholder for authentication state
+import React, { useEffect } from "react";
+import { Text } from "react-native";
+import MainView from "../../../components/views/mainView";
+import { router } from "expo-router";
 
 export default function Index() {
+
+    const token = localStorage.getItem("token");
+    const isAuthenticated = !!token;
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            router.replace("/account/loginForm");
+        }
+    }, []);
+
+    if (!isAuthenticated) {
+        return null;
+    }
+
     return (
-        (isAuthenticated) ?
         <MainView>
             <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
                 Welcome back to GymBuddy!
-            </Text> 
-        </MainView> : 
-        router.push('/account/loginForm')
+            </Text>
+        </MainView>
     );
 }
