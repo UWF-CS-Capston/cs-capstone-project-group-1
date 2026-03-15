@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import React from 'react';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
 
 interface NavButtonProps {

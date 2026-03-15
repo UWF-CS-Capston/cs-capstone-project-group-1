@@ -4,6 +4,7 @@ import Index from '../qr/index';
 import { useEffect, useState } from 'react';
 import FormButton from '../../components/buttons/formButtons';
 import FormView from '../../components/views/formView';
+import React from 'react';
 
 const isAuthenticated: boolean = true; // Placeholder for authentication state
 

@@ -1,6 +1,6 @@
 import { Pool, QueryResult, QueryResultRow } from "pg";
 
-const pool = new Pool(
+export const pool = new Pool(
     process.env.DATABASE_URL
         ? {
             connectionString: process.env.DATABASE_URL,

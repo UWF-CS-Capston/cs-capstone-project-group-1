@@ -25,7 +25,13 @@ export default function RootLayout() {
                 tabBarAllowFontScaling: true,
             }}
         >
-            <Tabs.Screen name="index" options={{ 
+            <Tabs.Screen
+                name="machines"
+                options={{
+                    title: "Machines",
+                }}
+            />
+            <Tabs.Screen name="index" options={{
                 title: "Home",
                 tabBarIcon: ({ focused, color, size }) => (
                     <Ionicons name={focused ? 'home-sharp' : 'home-outline'} size={size} color={color} />

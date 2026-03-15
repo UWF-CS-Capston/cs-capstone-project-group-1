@@ -1,17 +1,22 @@
 import dotenv from "dotenv";
 dotenv.config();
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+
 import authRoutes from "./routes/auth";
 import qrRoutes from "./routes/qr";
+import machineRoutes from "./routes/machines";
+
 import { authenticate, authorize } from "./middleware/authMiddleware";
 import { testDatabaseConnection } from "./db";
 import { apiFetch } from "../utils/api";
 import rateLimit from "express-rate-limit";
 const app = express();
 
-app.use(helmet());
+app.set("etag", false);
 
 // src/actions/server.ts
 app.use(cors({
@@ -23,6 +28,9 @@ app.use(cors({
     ],
     credentials: true,
 }));
+
+
+app.use(helmet());
 app.use(express.json());
 
 const authLimiter = rateLimit({
@@ -31,10 +39,10 @@ const authLimiter = rateLimit({
     message: "Too many auth attempts. Try again later.",
 });
 
-// ✅ Now mount routes AFTER middleware
 app.use("/api/auth", authLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/qr", qrRoutes);
+app.use("/api/machines", machineRoutes);
 
 app.get("/health", (req, res) => {
     res.json({ status: "ok" });
@@ -69,4 +77,8 @@ const startServer = async () => {
     }
 };
 
-void startServer();
+export default app;
+
+if (process.env.NODE_ENV !== "test") {
+    void startServer();
+}
