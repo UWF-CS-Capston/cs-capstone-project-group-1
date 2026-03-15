@@ -45,7 +45,7 @@ export const register = async (req: Request, res: Response) => {
         await query(
             `INSERT INTO users (email, password_hash, role)
              VALUES ($1, $2, $3)`,
-            [email, hashedPassword, "member"] // 🔥 never trust client role
+            [email, hashedPassword, "member"] 
         );
 
         return res.status(201).json({ message: "User registered" });
@@ -61,7 +61,9 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password required" });
+    }
     try {
         const result = await query(
             `SELECT id, password_hash, role
@@ -81,6 +83,6 @@ export const login = async (req: Request, res: Response) => {
 
         return res.json({ token });
     } catch {
-        return res.status(500).json({ message: "Login failed" });
+        return res.status(400).json({ message: "Invalid credentials" });
     }
 };
