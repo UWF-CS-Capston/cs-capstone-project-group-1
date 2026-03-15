@@ -10,3 +10,6 @@
 
 <h2>For Testing</h2>
 <p><b>Run: </b>npm test -- --coverage</p>
+
+<h2>For Backend</h2>
+<p><b>Run: </b> npm run dev</p>
