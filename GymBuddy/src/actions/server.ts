@@ -12,14 +12,21 @@ import machineRoutes from "./routes/machines";
 
 import { authenticate, authorize } from "./middleware/authMiddleware";
 import { testDatabaseConnection } from "./db";
-
+import { apiFetch } from "../utils/api";
+import rateLimit from "express-rate-limit";
 const app = express();
 
 app.set("etag", false);
 
+// src/actions/server.ts
 app.use(cors({
-    origin: "http://localhost:8081",
-    credentials: true
+    origin: [
+        "http://localhost:8081",
+        "http://192.168.1.182:8081",  // Your computer
+        "http://192.168.1.162:8081",  // Your phone
+        /\.exp\.direct$/                // Expo tunnel URLs
+    ],
+    credentials: true,
 }));
 
 

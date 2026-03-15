@@ -5,6 +5,7 @@ import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
 import { router } from 'expo-router';
 import MainView from '../../../components/views/mainView';
+import { apiFetch } from '../../../utils/api';
 
 export default function CreateForm() {
     const [email, setEmail] = React.useState("");
@@ -20,21 +21,21 @@ export default function CreateForm() {
         }
 
         try {
-            const res = await fetch("http://localhost:5000/api/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, name, password })
+            const res = await apiFetch('/api/auth/register', {
+            method: "POST",
+            body: JSON.stringify({ email, name, password })
             });
+            
             const data = await res.json();
             if (res.ok) {
-                setMessage("Account created successfully ✅");
-                router.push('/account/loginForm');
+            setMessage("Account created successfully ✅");
+            router.push('/account/loginForm');
             } else {
-                setMessage(data.message || "Failed to create account.");
+            setMessage(data.message || "Failed to create account.");
             }
         } catch (error) {
-            setMessage("Failed to create account.");
-
+            setMessage("Failed to connect to server");
+            console.error('Registration error:', error);
         }
     };
 
@@ -49,7 +50,7 @@ export default function CreateForm() {
                     <FormButton title="Back to Login" onPress={() =>
                         router.dismiss()
                     } />
-                    <FormButton title="Create Account" onPress={() => setMessage("Attempting to create account...")} />
+                    <FormButton title="Create Account" onPress={handleCreateAccount} />
                 </View>
                 <Text style={{ marginTop: 20 }}>{message}</Text>
             </FormView>

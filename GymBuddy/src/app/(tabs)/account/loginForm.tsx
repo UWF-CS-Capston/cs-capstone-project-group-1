@@ -5,61 +5,47 @@ import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
 import { router } from 'expo-router';
 import MainView from '../../../components/views/mainView';
+import { useAuth } from '../../../contexts/AuthContext';
+import { apiFetch } from '../../../utils/api';
 
 export default function LoginForm() {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [message, setMessage] = React.useState("");
+    const { login } = useAuth();
 
     const handleLogin = async () => {
-        if (!email || !password) {
-            setMessage("Please enter both email and password.");
-            return;
-        }
+  try {
+    const res = await apiFetch('/api/auth/login', {
+      method: "POST",
+      body: JSON.stringify({ email, password })
+    });
 
-        console.log("Attempting login with:", { email, password });
-        try {
-            const res = await fetch("http://localhost:5000/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
-
-            const text = await res.text();
-            console.log("Login response status:", res.status);
-            console.log("Login response body:", text);
-
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch {
-                data = { message: text };
-            }
-            if (res.ok) {
-                setMessage("Login successful ✅");
-                localStorage.setItem("token", data.token);
-                router.push('/account');
-            } else {
-                setMessage(data.message || "Login failed. Username or password may be incorrect.");
-            }
-        } catch (error) {
-            setMessage("Login failed: ");
-        }
-    };
-
+    const data = await res.json();
+    if (res.ok) {
+      setMessage("Login successful ✅");
+      login(data.token);
+      router.push('/');
+    } else {
+      setMessage(data.message || "Login failed.");
+    }
+  } catch (error) {
+    setMessage("Login failed: Cannot connect to server");
+    console.error('Login error:', error);
+  }
+};
+    
     return (
         <MainView>
             <FormView>
                 <FormField placeholder="Email" value={email} onChange={setEmail} />
                 <FormField placeholder="Password" value={password} onChange={setPassword} secureTextEntry />
-                <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
-                    <FormButton title="Sign Up" onPress={() => router.push('/account/createForm')} />
-                    <FormButton title="Login" onPress={() => {
-                        handleLogin();
-                    }} />
+                <View style ={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+                    <FormButton title="Sign Up" onPress={ () => router.push('/account/createForm')} />
+                    <FormButton title="Login" onPress={handleLogin} />
                 </View>
                 <Text style={{ marginTop: 20 }}>{message}</Text>
             </FormView>
         </MainView>
-    )
+    );
 }
