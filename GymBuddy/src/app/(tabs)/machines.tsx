@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from "react-native";
+import { apiFetch } from "../../utils/api";
+import storage from "../../utils/storage";
 
 import bench from "../../../assets/machines/bench-press.png";
 import legpress from "../../../assets/machines/leg-press-machine.png";
@@ -14,12 +16,10 @@ const machineImages: any = {
 };
 
 export default function Machines() {
-
     const [machines, setMachines] = React.useState<any[]>([]);
     const [positions, setPositions] = React.useState<{ [key: number]: number | null }>({});
     const [joined, setJoined] = React.useState<{ [key: number]: boolean }>({});
-
-    const token = localStorage.getItem("token");
+    const [isLoading, setIsLoading] = React.useState(false);
 
     /*
     Load machines
@@ -28,48 +28,61 @@ export default function Machines() {
         loadMachines();
     }, []);
 
+    const getToken = async () => {
+        try {
+            return await storage.getItem('token');
+        } catch (error) {
+            console.error('Error getting token:', error);
+            return null;
+        }
+    };
+
     const loadMachines = async () => {
+        setIsLoading(true);
+        try {
+            const res = await apiFetch('/api/machines');
+            const data = await res.json();
+            setMachines(data);
 
-        const res = await fetch("http://localhost:5000/api/machines");
-        const data = await res.json();
-        setMachines(data);
+            const token = await getToken();
+            if (!token) {
+                setIsLoading(false);
+                return;
+            }
 
-        if (!token) return;
-
-        for (const m of data) {
-            try {
-
-                const posRes = await fetch(
-                    `http://localhost:5000/api/machines/${m.id}/position`,
-                    {
+            // Load positions for all machines
+            for (const m of data) {
+                try {
+                    const posRes = await apiFetch(`/api/machines/${m.id}/position`, {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
+                    });
+
+                    if (posRes.ok) {
+                        const posData = await posRes.json();
+
+                        if (posData.position !== null && posData.position !== undefined) {
+                            setJoined(prev => ({
+                                ...prev,
+                                [m.id]: true
+                            }));
+
+                            setPositions(prev => ({
+                                ...prev,
+                                [m.id]: posData.position
+                            }));
+                        }
                     }
-                );
-
-                if (posRes.ok) {
-                    const posData = await posRes.json();
-
-                    if (posData.position !== null && posData.position !== undefined) {
-
-                        setJoined(prev => ({
-                            ...prev,
-                            [m.id]: true
-                        }));
-
-                        setPositions(prev => ({
-                            ...prev,
-                            [m.id]: posData.position
-                        }));
-
-                    }
-
+                } catch (err) {
+                    console.warn("Position lookup failed for machine", m.id, err);
                 }
-
-            } catch (err) {
-                console.warn("Position lookup failed", err);
             }
+        } catch (error) {
+            console.error('Error loading machines:', error);
+            Alert.alert("Error", "Failed to load machines");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -77,99 +90,98 @@ export default function Machines() {
     Join queue
     */
     const joinQueue = async (machineId: number) => {
-
+        const token = await getToken();
+        
         if (!token) {
-            alert("You must be logged in");
+            Alert.alert("Not Logged In", "You must be logged in to join a queue");
             return;
         }
 
-        const res = await fetch(
-            `http://localhost:5000/api/machines/${machineId}/join`,
-            {
+        try {
+            const res = await apiFetch(`/api/machines/${machineId}/join`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => null);
+                Alert.alert("Error", err?.message || "Already in queue or request failed");
+                return;
             }
-        );
 
-        if (!res.ok) {
-            const err = await res.json().catch(() => null);
-            alert(err?.message || "Already in queue or request failed");
-            return;
-        }
+            setJoined(prev => ({
+                ...prev,
+                [machineId]: true
+            }));
 
-        setJoined(prev => ({
-            ...prev,
-            [machineId]: true
-        }));
-
-        try {
-
-            const posRes = await fetch(
-                `http://localhost:5000/api/machines/${machineId}/position`,
-                {
+            // Get updated position
+            try {
+                const posRes = await apiFetch(`/api/machines/${machineId}/position`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
+                });
+
+                if (posRes.ok) {
+                    const posData = await posRes.json();
+                    setPositions(prev => ({
+                        ...prev,
+                        [machineId]: posData.position
+                    }));
                 }
-            );
-
-            if (posRes.ok) {
-                const posData = await posRes.json();
-
-                setPositions(prev => ({
-                    ...prev,
-                    [machineId]: posData.position
-                }));
+            } catch (err) {
+                console.warn("Position fetch failed", err);
             }
 
-        } catch (err) {
-            console.warn("Position fetch failed", err);
+            await loadMachines();
+        } catch (error) {
+            console.error('Error joining queue:', error);
+            Alert.alert("Error", "Failed to join queue");
         }
-
-        await loadMachines();
     };
 
     /*
     Leave queue
     */
     const leaveQueue = async (machineId: number) => {
-
+        const token = await getToken();
+        
         if (!token) return;
 
-        const res = await fetch(
-            `http://localhost:5000/api/machines/${machineId}/leave`,
-            {
+        try {
+            const res = await apiFetch(`/api/machines/${machineId}/leave`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            });
+
+            if (!res.ok) {
+                console.error("Leave queue failed");
+                return;
             }
-        );
 
-        if (!res.ok) {
-            console.error("Leave queue failed");
-            return;
+            setJoined(prev => ({
+                ...prev,
+                [machineId]: false
+            }));
+
+            setPositions(prev => ({
+                ...prev,
+                [machineId]: null
+            }));
+
+            await loadMachines();
+        } catch (error) {
+            console.error('Error leaving queue:', error);
+            Alert.alert("Error", "Failed to leave queue");
         }
-
-        setJoined(prev => ({
-            ...prev,
-            [machineId]: false
-        }));
-
-        setPositions(prev => ({
-            ...prev,
-            [machineId]: null
-        }));
-
-        await loadMachines();
     };
 
     const renderMachine = ({ item }: any) => (
-
         <View style={styles.card}>
-
             <Image
                 source={machineImages[item.name]}
                 style={styles.image}
@@ -184,13 +196,16 @@ export default function Machines() {
             </Text>
 
             {positions[item.id] !== undefined && positions[item.id] !== null && (
-                <Text style={styles.queueCount}>
-                    Your position: {positions[item.id]}
+                <Text style={styles.positionText}>
+                    Your position: #{positions[item.id]}
                 </Text>
             )}
 
             <TouchableOpacity
-                style={styles.queueButton}
+                style={[
+                    styles.queueButton,
+                    joined[item.id] && styles.leaveButton
+                ]}
                 onPress={() => {
                     if (joined[item.id]) {
                         leaveQueue(item.id);
@@ -198,45 +213,51 @@ export default function Machines() {
                         joinQueue(item.id);
                     }
                 }}
+                disabled={isLoading}
             >
                 <Text style={styles.queueText}>
                     {joined[item.id] ? "Leave Queue" : "Join Queue"}
                 </Text>
             </TouchableOpacity>
-
         </View>
     );
 
     return (
         <View style={styles.container}>
-
             <Text style={styles.title}>Gym Machines</Text>
 
-            <FlatList
-                data={machines}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderMachine}
-            />
-
+            {isLoading && machines.length === 0 ? (
+                <Text style={styles.loadingText}>Loading machines...</Text>
+            ) : (
+                <FlatList
+                    data={machines}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={renderMachine}
+                    showsVerticalScrollIndicator={false}
+                />
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
         padding: 16,
         backgroundColor: "#111",
     },
-
     title: {
         fontSize: 28,
         color: "white",
         fontWeight: "bold",
         marginBottom: 12,
     },
-
+    loadingText: {
+        color: "#9ca3af",
+        fontSize: 16,
+        textAlign: "center",
+        marginTop: 20,
+    },
     card: {
         backgroundColor: "#1f2937",
         padding: 20,
@@ -244,36 +265,41 @@ const styles = StyleSheet.create({
         marginBottom: 14,
         alignItems: "center",
     },
-
     image: {
         width: 90,
         height: 90,
         marginBottom: 10,
         resizeMode: "contain",
     },
-
     machineName: {
         color: "white",
         fontSize: 18,
         fontWeight: "600",
         marginBottom: 4,
     },
-
     queueCount: {
         color: "#9ca3af",
+        marginBottom: 5,
+    },
+    positionText: {
+        color: "#22c55e",
+        fontWeight: "600",
         marginBottom: 10,
     },
-
     queueButton: {
         backgroundColor: "#22c55e",
-        paddingHorizontal: 14,
-        paddingVertical: 8,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
         borderRadius: 6,
+        minWidth: 120,
+        alignItems: "center",
     },
-
+    leaveButton: {
+        backgroundColor: "#ef4444",
+    },
     queueText: {
         color: "white",
         fontWeight: "bold",
+        fontSize: 16,
     }
-
 });
