@@ -13,7 +13,6 @@ import machineRoutes from "./routes/machines";
 import { authenticate, authorize } from "./middleware/authMiddleware";
 import { testDatabaseConnection } from "./db";
 import { apiFetch } from "../utils/api";
-import rateLimit from "express-rate-limit";
 const app = express();
 
 app.set("etag", false);

@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config({ path: path.resolve(__dirname, '../../Backend/.env') });
+
 import request from "supertest";
 import app from "../src/actions/server";
 import { generateToken } from "../src/actions/utils/jwt";

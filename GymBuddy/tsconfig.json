@@ -7,14 +7,16 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*",
     "app/**/*",
     "components/**/*",
     "contexts/**/*",
-    "utils/**/*"
+    "utils/**/*",
+    "tests/**/*"
   ],
   "exclude": [
     "node_modules",
