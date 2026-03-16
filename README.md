@@ -1,4 +1,8 @@
 <h1>Capstone Project: GymBuddy</h1>
+<h2>CAPSTONE STAGE ONE VIDEO</h2>
+
+<p>link to youtube video: https://youtu.be/ga09kVtvHNQ</p>
+
 <h2>First Launch</h2>
 
 <p>Before you start you must edit GymBuddy/src/utils/api.ts and change the constant variable COMPUTER_IP and PORT to the local machine's IP address and port number respectively (port should be 5000 on default). You may find that this will be easier if you reserve an IPv4 address on your router so it doesn't change mid development. To clarify you need the IPv4 address of the machine that is running the frontend code. </p>
