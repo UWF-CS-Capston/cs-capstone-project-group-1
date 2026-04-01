@@ -7,6 +7,7 @@ export default function RootLayout() {
         }}>
             <Stack.Screen name="index" options={{title: "Home"}} />   
             <Stack.Screen name="machinePage" options={{title: "Machine View"}} />
+            
         </Stack>
     );
 }

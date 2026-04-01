@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, FlatList, StyleSheet } from 'react-native';
-import MainView from '../../components/views/mainView';
+import MainView from '../../../components/views/mainView';
 
 // Mock machine data
 const machines = [
