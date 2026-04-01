@@ -6,8 +6,7 @@ export default function RootLayout() {
             headerShown: false,
         }}>
             <Stack.Screen name="index" options={{title: "Home"}} />   
-            <Stack.Screen name="machinePage" options={{title: "Machine View"}} />
-            
+            <Stack.Screen name="gym" options={{title: "Gym View"}} />
         </Stack>
     );
 }
