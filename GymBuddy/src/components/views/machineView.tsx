@@ -3,16 +3,24 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 interface MachineViewProps {
     title: string;
-    machines: number;
-    inUse: number;
+    image: any; // replace with actual image type
+    queue: number;
+    position?: number; // optional, only show if user is in queue
+    joined: boolean; // whether the user has joined the queue
+    isLoading: boolean; // whether a join/leave action is in progress
+    onJoin: () => void; // function to call when joining queue
+    onLeave: () => void; // function to call when leaving queue
     onPress?: () => void;
 }
 
-export default function MachineView({title, machines, inUse, onPress} : MachineViewProps) {
+export default function MachineView({title, image, queue, position, joined, isLoading, onJoin, onLeave, onPress} : MachineViewProps) {
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>{title}</Text>
-            <Text style={styles.descriptionText}>In Use: {inUse} / {machines}</Text>
+            <Text style={styles.descriptionText}>Queue: {queue}</Text>
+            {position !== undefined && (
+                <Text style={styles.descriptionText}>Your position: #{position}</Text>
+            )}
             <Pressable onPress={onPress} style={styles.button}>
                 <Text style={styles.buttonText}>View</Text>
             </Pressable>
