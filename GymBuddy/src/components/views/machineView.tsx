@@ -3,57 +3,105 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 interface MachineViewProps {
     title: string;
-    image: any; // replace with actual image type
     queue: number;
-    position?: number; // optional, only show if user is in queue
-    joined: boolean; // whether the user has joined the queue
-    isLoading: boolean; // whether a join/leave action is in progress
-    onJoin: () => void; // function to call when joining queue
-    onLeave: () => void; // function to call when leaving queue
+    position?: number | null;
+    isUsing: boolean;
+    isJoined: boolean;
+    isLoading: boolean;
+    onJoin: () => void;
+    onLeave: () => void;
     onPress?: () => void;
 }
 
-export default function MachineView({title, image, queue, position, joined, isLoading, onJoin, onLeave, onPress} : MachineViewProps) {
+export default function MachineView({
+    title,
+    queue,
+    position,
+    isUsing,
+    isJoined,
+    isLoading,
+    onJoin,
+    onLeave,
+    onPress,
+}: MachineViewProps) {
+    const actionLabel = isJoined ? 'Leave Queue' : 'Join Queue';
+
     return (
         <View style={styles.container}>
             <Text style={styles.titleText}>{title}</Text>
             <Text style={styles.descriptionText}>Queue: {queue}</Text>
-            {position !== undefined && (
+            {isUsing ? (
+                <Text style={styles.descriptionText}>You are using this machine</Text>
+            ) : position ? (
                 <Text style={styles.descriptionText}>Your position: #{position}</Text>
+            ) : (
+                <Text style={styles.descriptionText}>No active queue spot yet</Text>
             )}
-            <Pressable onPress={onPress} style={styles.button}>
-                <Text style={styles.buttonText}>View</Text>
-            </Pressable>
+            <View style={styles.buttonRow}>
+                <Pressable
+                    onPress={isJoined ? onLeave : onJoin}
+                    style={[
+                        styles.button,
+                        isJoined ? styles.leaveButton : styles.joinButton
+                    ]}
+                    disabled={isLoading}
+                >
+                    <Text style={styles.buttonText}>
+                        {isLoading ? 'Working...' : actionLabel}
+                    </Text>
+                </Pressable>
+                <Pressable onPress={onPress} style={styles.button} disabled={isLoading}>
+                    <Text style={styles.buttonText}>View</Text>
+                </Pressable>
+            </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        
         justifyContent: 'space-around',
-        alignContent: 'space-around',
-        width: '25%',
+        width: 210,
+        minHeight: 230,
         backgroundColor: '#06b690',
         margin: 10,
         borderColor: '#09eba3',
         borderWidth: 2,
         borderRadius: 10,
-        padding: 10,
+        padding: 16,
         shadowColor: '#000',
-        shadowOffset: { width: 5, height: 7},
-        shadowOpacity: .25,
+        shadowOffset: { width: 5, height: 7 },
+        shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 3,
     },
+    joinButton: {
+    backgroundColor: '#0ee0b1', // green 
+    borderColor: '#0ee0b1',
+    },
+
+    leaveButton: {
+        backgroundColor: '#e74c3c', // red
+        borderColor: '#111111',
+    },
+    buttonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 10,
+        marginTop: 12,
+    },
     button: {
-        width: 100,
-        padding: 10,
+        flex: 1,
+        paddingVertical: 10,
         borderWidth: 1,
         borderColor: '#09eba3',
         borderRadius: 15,
         backgroundColor: '#09eba3',
-        margin: 10,
+        marginTop: 8,
+    },
+    actionButton: {
+        backgroundColor: '#0ee0b1',
     },
     buttonText: {
         color: '#055c49',
@@ -65,11 +113,13 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontWeight: 'bold',
         fontSize: 20,
+        marginBottom: 8,
     },
     descriptionText: {
         color: '#055c49',
         textAlign: 'left',
         fontSize: 16,
         fontWeight: '500',
-    }
-})
+        marginBottom: 6,
+    },
+});

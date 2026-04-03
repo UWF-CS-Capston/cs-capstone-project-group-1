@@ -43,13 +43,6 @@ export const register = async (req: Request, res: Response) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // In the register function, you're setting role to "member"
-        await query(
-            `INSERT INTO users (email, password_hash, role)
-            VALUES ($1, $2, $3)`,
-            [email, hashedPassword, "member"] // This sets role to "member" for all new users
-        );
-
         await query(
             `INSERT INTO users (email, password_hash, role)
              VALUES ($1, $2, $3)`,
