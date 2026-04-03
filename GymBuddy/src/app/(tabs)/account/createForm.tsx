@@ -48,7 +48,7 @@ export default function CreateForm() {
                 <FormField placeholder="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} secureTextEntry />
                 <View style ={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
                     <FormButton title="Back to Login" onPress={() =>
-                        router.dismiss()
+                        router.replace('/account/loginForm')
                     } />
                     <FormButton title="Create Account" onPress={handleCreateAccount} />
                 </View>

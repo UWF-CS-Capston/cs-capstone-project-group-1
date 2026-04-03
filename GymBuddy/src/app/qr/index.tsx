@@ -183,10 +183,6 @@ export default function Index() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Authenticated 🎉</Text>
-        <Text style={styles.tokenText}>
-          Token: {token}
-        </Text>
-
         <NavButton 
           title={isLoading ? "Generating..." : "Generate QR"} 
           onPress={generateQR} 
@@ -198,6 +194,9 @@ export default function Index() {
 
         {qrImage !== "" && (
           <>
+            <Text style={styles.tokenText}>
+              Token: {token}
+            </Text>
             <Image
               source={{ uri: qrImage }}
               style={styles.qrImage}
