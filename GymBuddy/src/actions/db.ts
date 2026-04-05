@@ -1,4 +1,5 @@
 import { Pool, QueryResult, QueryResultRow } from "pg";
+import { NetworkConfig } from "../config/network.config";
 
 export const pool = new Pool(
     process.env.DATABASE_URL
@@ -10,11 +11,11 @@ export const pool = new Pool(
                     : false,
         }
         : {
-            host: process.env.PGHOST || "192.168.1.182",
-            port: Number(process.env.PGPORT || 5432),
-            user: process.env.PGUSER || "postgres",
-            password: process.env.PGPASSWORD,
-            database: process.env.PGDATABASE || "gymbuddy",
+            host: process.env.PGHOST || NetworkConfig.DATABASE.HOST,
+            port: Number(process.env.PGPORT || NetworkConfig.DATABASE.PORT),
+            user: process.env.PGUSER || NetworkConfig.DATABASE.USER,
+            password: process.env.PGPASSWORD || NetworkConfig.DATABASE.PASSWORD,
+            database: process.env.PGDATABASE || NetworkConfig.DATABASE.DATABASE,
             ssl:
                 process.env.DB_SSL === "true"
                     ? { rejectUnauthorized: false }
