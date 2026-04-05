@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 const COMPUTER_IP = '192.168.1.182';
-const PORT = '5001';
+const PORT = '5000';
 
 export const API_BASE_URL =
   Platform.OS === 'web'

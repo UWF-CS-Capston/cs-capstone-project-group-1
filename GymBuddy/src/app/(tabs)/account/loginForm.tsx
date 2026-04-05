@@ -24,8 +24,8 @@ export default function LoginForm() {
     const data = await res.json();
     if (res.ok) {
       setMessage("Login successful ✅");
-      login(data.token);
-      router.push('/');
+      await login(data.token);
+      router.replace('/(tabs)/account');
     } else {
       setMessage(data.message || "Login failed.");
     }
