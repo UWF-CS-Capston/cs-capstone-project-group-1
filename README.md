@@ -3,33 +3,6 @@
 
 <p>link to youtube video: https://youtu.be/ga09kVtvHNQ</p>
 
-<h2>First Launch</h2>
-
-<p>⚙️ <b>Network Configuration:</b> All IP addresses and port numbers are now centralized! Before starting:</p>
-
-<p><b>Quick Setup (3 steps):</b></p>
-<ol>
-  <li>Find your computer's IP address (see commands below)</li>
-  <li>Edit <b>GymBuddy/src/config/network.config.ts</b></li>
-  <li>Update the <code>COMPUTER_IP</code> value with your IP address</li>
-</ol>
-
-
-<p>To get your IPv4 address you may execute the following commands in your terminal depending on your OS: <br>Windows: ipconfig<br>Linux: hostname -I<br>Mac: ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1 | awk '{print $2}'</p>
-
-<p>In your first launch, run: npm install, to ensure all packages needed are installed.</p>
-
-<h2>In order to run the app:</h2>
-
-<p> These instructions are for running the app. After app is running, you can click the link to open the web page.</p>
-
-<p><b>Step 1:</b> cd GymBuddy</p>
-
-<p><b>Step 2:</b> npm start </p>
-
-<h2>For Testing</h2>
-<p><b>Run: </b>npm test -- --coverage</p>
-
 <h2>After Cloning the Repository</h2>
 
 <p><b>Step 1:</b> Navigate to the project folder</p>
@@ -46,7 +19,6 @@
 
 <p><b>Step 5 (Windows Only):</b> If npm scripts are blocked in PowerShell, run this once</p>
 <p>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</p>
-
 
 <h2>Environment Setup</h2>
 
@@ -65,10 +37,23 @@ PGDATABASE=gymbuddy
 
 <p><b>Network Configuration:</b> All network settings (IPs, ports) are in <b>GymBuddy/src/config/network.config.ts</b></p>
 
+<h2>First Launch</h2>
+
+<p><b>Network Configuration:</b> All IP addresses and port numbers are now centralized! Before starting:</p>
+
+<p><b>Quick Setup (3 steps):</b></p>
+<ol>
+  <li>Find your computer's IP address (see commands below)</li>
+  <li>Edit <b>GymBuddy/src/config/network.config.ts</b></li>
+  <li>Update the <code>COMPUTER_IP</code> value with your IP address</li>
+</ol>
 
 
+<p>To get your IPv4 address you may execute the following commands in your terminal depending on your OS: <br>Windows: ipconfig<br>Linux: hostname -I<br>Mac: ifconfig | grep inet | grep -v inet6 | grep -v 127.0.0.1 | awk '{print $2}'</p>
 
-<h2>Running the App</h2>
+<p>In your first launch, run: npm install, to ensure all packages needed are installed.</p>
+
+<h2>Running the frontend App</h2>
 
 <p><b>Step 1:</b> Make sure you are inside the GymBuddy folder</p>
 <p>cd GymBuddy</p>
@@ -78,9 +63,12 @@ PGDATABASE=gymbuddy
 
 <p>After the server starts, open the link shown in the terminal.</p>
 
+<h2>Running the backend App</h2>
 
-<h2>Running the Backend in Development Mode</h2>
+<p><b>Step 1:</b> Make sure you are inside the Backend folder</p>
+<p>cd Backend</p>
 
+<p><b>Step 2:</b> Start the backend</p>
 <p>npm run dev</p>
 
 
