@@ -13,6 +13,7 @@ import FormField from '../../components/inputFields/inputField';
 import NavButton from '../../components/buttons/navButton';
 import { apiFetch } from '../../utils/api';
 import storage from '../../utils/storage';
+import { router } from 'expo-router';
 
 export default function Index() {
   const [qrImage, setQrImage] = useState("");
@@ -116,18 +117,7 @@ export default function Index() {
     }
   };
 
-  const logout = async () => {
-    try {
-      await storage.removeItem('token');
-      setToken("");
-      setIsAuthenticated(false);
-      setQrImage("");
-      setQrCode("");
-      setMessage("Logged out");
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
+
 
   const generateQR = async () => {
     setIsLoading(true);
@@ -209,7 +199,10 @@ export default function Index() {
           </>
         )}
 
-        <NavButton title="Logout" onPress={logout} />
+        <NavButton 
+          title="Go to Account" 
+          onPress={() => router.push('/(tabs)/account')} 
+        />
         <Text style={styles.messageText}>{message}</Text>
       </View>
     );
