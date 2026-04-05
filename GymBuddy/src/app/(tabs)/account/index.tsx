@@ -14,13 +14,18 @@ interface UserInfo {
 }
 
 export default function Index() {
-  const { token, logout } = useAuth();
+  const { token, logout, isLoading: authLoading } = useAuth();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
+    // Wait for auth context to finish loading
+    if (authLoading) {
+      return;
+    }
+    
     if (!token) {
-      router.push('/account/loginForm');
+      router.replace('/account/loginForm');
       return;
     }
 
@@ -45,14 +50,18 @@ export default function Index() {
     };
 
     fetchUserInfo();
-  }, [token]);
+  }, [token, authLoading]);
   
-  if (!token || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <MainView>
         <ActivityIndicator size="large" color="#055c49" />
       </MainView>
     );
+  }
+  
+  if (!token) {
+    return null; // Will redirect in useEffect
   }
   
   return (
