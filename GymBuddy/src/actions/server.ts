@@ -17,12 +17,12 @@ const app = express();
 
 app.set("etag", false);
 
+import { DerivedConfig } from "../config/network.config";
+
 // src/actions/server.ts
 app.use(cors({
     origin: [
-        "http://localhost:8081",
-        "http://192.168.1.182:8081",  // Your computer
-        "http://192.168.1.162:8081",  // Your phone
+        ...DerivedConfig.CORS_ORIGINS,
         /\.exp\.direct$/                // Expo tunnel URLs
     ],
     credentials: true,
@@ -60,7 +60,9 @@ app.get(
     }
 );
 
-const PORT = process.env.PORT || 5000;
+import { NetworkConfig } from "../config/network.config";
+
+const PORT = process.env.PORT || NetworkConfig.API_PORT;
 
 const startServer = async () => {
     try {

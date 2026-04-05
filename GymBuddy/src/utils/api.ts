@@ -1,14 +1,12 @@
 // src/utils/api.ts
 import { Platform } from 'react-native';
 import Constants from 'expo-constants';
-
-const COMPUTER_IP = '192.168.1.182';
-const PORT = '5000';
+import { NetworkConfig } from '../config/network.config';
 
 export const API_BASE_URL =
   Platform.OS === 'web'
-    ? `http://localhost:${PORT}`
-    : `http://${COMPUTER_IP}:${PORT}`;
+    ? `http://localhost:${NetworkConfig.API_PORT}`
+    : `http://${NetworkConfig.COMPUTER_IP}:${NetworkConfig.API_PORT}`;
 
 export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
   const url = `${API_BASE_URL}${endpoint}`;
