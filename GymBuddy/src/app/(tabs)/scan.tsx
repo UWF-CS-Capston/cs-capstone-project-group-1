@@ -1,23 +1,25 @@
-import { Text, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import MainView from '../../components/views/mainView';
 import Index from '../qr/index';
-import { useEffect, useState } from 'react';
-import FormButton from '../../components/buttons/formButtons';
-import FormView from '../../components/views/formView';
 import React from 'react';
-
-const isAuthenticated: boolean = true; // Placeholder for authentication state
+import { useAuth } from '../../contexts/AuthContext';
+import { router } from 'expo-router';
+import FormButton from '../../components/buttons/formButtons';
 
 export default function Scan() {
+    const { token } = useAuth();
 
     return (
         <MainView>
-            {isAuthenticated ? (
+            {token ? (
                 <Index />
             ) : (
-                <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
-                    Please login to view your QR code.
-                </Text>
+                <View style={{ alignItems: 'center', marginTop: 40 }}>
+                    <Text style={{ fontSize: 20, textAlign: "center", marginBottom: 20 }}>
+                        Please login to view your QR code.
+                    </Text>
+                    <FormButton title="Go to Login" onPress={() => router.push('/account/loginForm')} />
+                </View>
             )}
         </MainView>
     );

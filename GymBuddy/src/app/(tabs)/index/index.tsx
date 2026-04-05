@@ -15,8 +15,7 @@ const mockGymData = {
 
 export default function Index() {
     const { token, isLoading } = useAuth();
-    //const isLoggedIn = !!token;
-    const isLoggedIn = true; // temporary for testing, replace with actual auth check
+    const isLoggedIn = !!token;
 
     if (isLoading) {
         return (
@@ -28,46 +27,57 @@ export default function Index() {
         );
     }
 
+    // Information page for non-logged-in users
+    if (!isLoggedIn) {
+        return (
+            <MainView>
+                <View style={{ padding: 20, alignItems: 'center' }}>
+                    <Text style={{ fontSize: 28, fontWeight: 'bold', textAlign: "center", marginTop: 20, marginBottom: 20 }}>
+                        Welcome to GymBuddy!
+                    </Text>
+                    
+                    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 15, lineHeight: 24 }}>
+                        Track gym occupancy in real-time and plan your workout when it's least crowded.
+                    </Text>
+                    
+                    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 15, lineHeight: 24 }}>
+                        🏋️ Check live gym capacity{'\n'}
+                        📱 Get your personal QR code{'\n'}
+                        ⏰ Find the best time to visit
+                    </Text>
+                    
+                    <View style={{ marginTop: 20 }}>
+                        <NavButton 
+                            title="Login to Get Started" 
+                            onPress={() => router.push('/(tabs)/account/loginForm')} 
+                        />
+                    </View>
+                </View>
+            </MainView>
+        );
+    }
+
+    // Logged-in user view
     return (
         <MainView>
             <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
-                {isLoggedIn 
-                    ? "Welcome back to GymBuddy!" 
-                    : "Welcome to GymBuddy! Please login to continue."
-                }
+                Welcome back to GymBuddy!
             </Text>
             
-            <View style={{ 
-                flexDirection: 'row', 
-                justifyContent: 'center', 
-                width: '100%', 
-                marginTop: 20
-            }}>
-                {!isLoggedIn && (
-                    <NavButton 
-                        title="Go to Account" 
-                        onPress={() => router.push('/account')} 
-                    />
-                )}
-                
+            <View style={{ marginTop: 20 }}>
+                <GymView 
+                    title={mockGymData.title}
+                    occupancy={mockGymData.occupancy}
+                    occupancyLimit={mockGymData.occupancyLimit}
+                    open={mockGymData.open}
+                    address={mockGymData.address}
+                    onPress={() => router.push('/gym')}
+                />
+                <NavButton 
+                    title="Go to Account" 
+                    onPress={() => router.push('/account')} 
+                />
             </View>
-            
-            {isLoggedIn && (
-                <View style={{ marginTop: 20 }}>
-                    <GymView 
-                        title={mockGymData.title}
-                        occupancy={mockGymData.occupancy}
-                        occupancyLimit={mockGymData.occupancyLimit}
-                        open={mockGymData.open}
-                        address={mockGymData.address}
-                        onPress={() => router.push('/gym')}
-                    />
-                    <NavButton 
-                        title="Go to Account" 
-                        onPress={() => router.push('/account')} 
-                    />
-                </View>
-            )}
         </MainView>
     );
 }
