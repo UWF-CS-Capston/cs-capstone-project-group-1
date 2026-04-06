@@ -9,6 +9,7 @@ import rateLimit from "express-rate-limit";
 import authRoutes from "./routes/auth";
 import qrRoutes from "./routes/qr";
 import machineRoutes from "./routes/machines";
+import workoutPlanRoutes from "./routes/workoutPlans";
 
 import { authenticate, authorize } from "./middleware/authMiddleware";
 import { testDatabaseConnection } from "./db";
@@ -42,6 +43,7 @@ app.use("/api/auth", authLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/qr", qrRoutes);
 app.use("/api/machines", machineRoutes);
+app.use("/api/workout-plans", workoutPlanRoutes);
 
 app.get("/health", (req, res) => {
     res.json({ status: "ok" });
