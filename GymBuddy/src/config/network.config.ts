@@ -15,7 +15,7 @@
 export const NetworkConfig = {
   // Developer Machine IP Address
   // TODO: Update this with your computer's local IP address (e.g., from ipconfig/ifconfig)
-  COMPUTER_IP: '192.168.1.182',
+  COMPUTER_IP: '192.168.1.68',
   
   // Phone/Mobile Device IP Address (if testing on physical device)
   // TODO: Update this with your phone's local IP address

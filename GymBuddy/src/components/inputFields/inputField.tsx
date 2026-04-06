@@ -6,15 +6,17 @@ interface InputFieldProps {
     value: string;
     onChange: (text: string) => void;
     secureTextEntry?: boolean;
+    keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
 }
 
-export default function FormField({ placeholder, value, onChange, secureTextEntry }: InputFieldProps) {
+export default function FormField({ placeholder, value, onChange, secureTextEntry, keyboardType }: InputFieldProps) {
     return (
         <TextInput 
             placeholder={placeholder}
             value={value}
             onChangeText={onChange}
             secureTextEntry={secureTextEntry}
+            keyboardType={keyboardType}
             style={styles.input}
         />
     )
