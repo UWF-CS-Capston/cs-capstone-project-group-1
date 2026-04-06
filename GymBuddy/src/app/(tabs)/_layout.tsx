@@ -96,7 +96,7 @@ export default function RootLayout() {
                 }
             }} />
             
-            <Tabs.Screen name="employee" options={{
+            {/* <Tabs.Screen name="employee" options={{
                 title: "Employee",
                 tabBarIcon: ({ focused, color, size }) => (
                     <Ionicons name={focused ? 'briefcase-sharp' : 'briefcase-outline'} size={size} color={color} />
@@ -141,7 +141,7 @@ export default function RootLayout() {
                         </TouchableOpacity>
                     );
                 }
-            }} /> 
+            }} />  */}
         </Tabs>
     );
 }

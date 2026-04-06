@@ -183,10 +183,11 @@ export default function Index() {
         {isLoading && <ActivityIndicator size="large" color="#055c49" />}
 
         {qrImage !== "" && (
-          <>
-            <Text style={styles.tokenText}>
+          <> 
+            {/* -- DEBUG CODE BELOW SHOWS TOKEN WHEN UNCOMMENTED -- */}
+            {/* <Text style={styles.tokenText}>
               Token: {token}
-            </Text>
+            </Text> */}
             <Image
               source={{ uri: qrImage }}
               style={styles.qrImage}
