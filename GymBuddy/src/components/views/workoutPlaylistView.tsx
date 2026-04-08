@@ -1,10 +1,18 @@
 import React from "react";
 import { Text, View, StyleSheet, Pressable } from "react-native";
 
+type Workout = {
+    id: string;
+    title: string;
+    description: string;
+    reps: number;
+    machine: string;
+};
+
 interface WorkoutPlaylistViewProps {
     title: string;
     description: string;
-    workouts: string[];
+    workouts: Workout[];
     onPress: () => void;
 }
 

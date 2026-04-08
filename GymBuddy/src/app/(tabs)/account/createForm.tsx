@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import FormField from '../../../components/inputFields/inputField';
 import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
@@ -42,6 +42,7 @@ export default function CreateForm() {
     return (
         <MainView>
             <FormView>
+                <Text style={styles.header}>Create Account</Text>
                 <FormField placeholder="Email" value={email} onChange={setEmail} />
                 <FormField placeholder="Name" value={name} onChange={setName} />   
                 <FormField placeholder="Password" value={password} onChange={setPassword} secureTextEntry />
@@ -57,3 +58,11 @@ export default function CreateForm() {
         </MainView>
     )
 }  
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+});

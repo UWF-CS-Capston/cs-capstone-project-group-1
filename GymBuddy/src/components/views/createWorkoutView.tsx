@@ -1,7 +1,22 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from "react";
+import { Alert, Text, View, StyleSheet } from "react-native";
 
-export default function FormView({ children }: { children: React.ReactNode }) {
+type Workout = {
+    id: string;
+    title: string;
+    description: string;
+    reps: number;
+    machine: string;
+};
+
+type WorkoutPlaylist = {
+    id: string;
+    title: string;
+    description: string;
+    workouts: Workout[];
+};
+
+export default function CreateWorkoutView({children}: {children: React.ReactNode}) {
     return (
         <View style={styles.container}>
             {children}
@@ -11,8 +26,8 @@ export default function FormView({ children }: { children: React.ReactNode }) {
 
 const styles = StyleSheet.create({
     container: {
-
-        justifyContent: 'center',
+        flex: 1,
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#06b690',
         margin: 20,

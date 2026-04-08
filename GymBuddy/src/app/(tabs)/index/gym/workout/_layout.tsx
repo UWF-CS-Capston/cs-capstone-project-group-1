@@ -7,7 +7,7 @@ export default function RootLayout() {
             headerShown: false,
         }}>
             <Stack.Screen name="workoutPage" options={{title: "Workouts"}} />
-            <Stack.Screen name="createWorkoutPage" options={{title: "Create Workout"}} />
+            <Stack.Screen name="createWorkoutOrPlaylistPage" options={{title: "Create Workout or Playlist"}} />
         </Stack>
     );
 }

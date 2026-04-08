@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import FormField from '../../../components/inputFields/inputField';
 import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
@@ -38,6 +38,7 @@ export default function LoginForm() {
     return (
         <MainView>
             <FormView>
+                <Text style={styles.header}>Login</Text>
                 <FormField placeholder="Email" value={email} onChange={setEmail} />
                 <FormField placeholder="Password" value={password} onChange={setPassword} secureTextEntry />
                 <View style ={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
@@ -49,3 +50,11 @@ export default function LoginForm() {
         </MainView>
     );
 }
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+});
