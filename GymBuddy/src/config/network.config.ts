@@ -4,9 +4,18 @@ const DATABASE_HOST =
   "localhost";
 
 export const NetworkConfig = {
-  COMPUTER_IP: "172.19.80.1",
-  PHONE_IP: "192.168.1.162",
-  API_PORT: 5001,
+  // Developer Machine IP Address
+  // TODO: Update this with your computer's local IP address (e.g., from ipconfig/ifconfig)
+  COMPUTER_IP: '192.168.1.68',
+  
+  // Phone/Mobile Device IP Address (if testing on physical device)
+  // TODO: Update this with your phone's local IP address
+  PHONE_IP: '192.168.1.162',
+  
+  // Backend API Server Port
+  API_PORT: 5000,
+  
+  // Expo Dev Server Port
   EXPO_DEV_PORT: 8081,
 
   CORS_ORIGINS: [

@@ -12,8 +12,9 @@ export default function MainView({ children }: { children: React.ReactNode }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#06d3a7'
+        backgroundColor: '#06d3a7',
+        
     },
 })

@@ -18,7 +18,7 @@ export default function RootLayout() {
                 ),
                 }} />
             
-            <Tabs.Screen name="workoutPage" options={{
+            <Tabs.Screen name="workout" options={{
                 title: "Workouts",
                 tabBarIcon: ({focused, color, size}) => (
                     <Ionicons name={focused ? 'fitness-sharp' : 'fitness-outline'} size={size} color={color} />

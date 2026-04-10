@@ -56,28 +56,31 @@ export default function Index() {
             </MainView>
         );
     }
+    else{
+        // Logged-in user view
+        return (
+            <MainView>
+                <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
+                    Welcome back to GymBuddy!
+                </Text>
+                
+                <View style={{ marginTop: 20 }}>
+                    <GymView 
+                        title={mockGymData.title}
+                        occupancy={mockGymData.occupancy}
+                        occupancyLimit={mockGymData.occupancyLimit}
+                        open={mockGymData.open}
+                        address={mockGymData.address}
+                        onPress={() => router.push('/gym')}
+                    />
+                    <NavButton 
+                        title="Go to Account" 
+                        onPress={() => router.push('/account')} 
+                    />
+                </View>
+            </MainView>
+        );
+    }
 
-    // Logged-in user view
-    return (
-        <MainView>
-            <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
-                Welcome back to GymBuddy!
-            </Text>
-            
-            <View style={{ marginTop: 20 }}>
-                <GymView 
-                    title={mockGymData.title}
-                    occupancy={mockGymData.occupancy}
-                    occupancyLimit={mockGymData.occupancyLimit}
-                    open={mockGymData.open}
-                    address={mockGymData.address}
-                    onPress={() => router.push('/gym')}
-                />
-                <NavButton 
-                    title="Go to Account" 
-                    onPress={() => router.push('/account')} 
-                />
-            </View>
-        </MainView>
-    );
+    
 }
