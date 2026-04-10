@@ -14,7 +14,7 @@ import machineRoutes from "./routes/machines";
 import workoutPlanRoutes from "./routes/workoutPlans";
 
 import { authenticate, authorize } from "./middleware/authMiddleware";
-import { testDatabaseConnection, pool } from "./db";
+import { testDatabaseConnection, pool, ensureDatabaseExists } from "./db";
 import { DerivedConfig, NetworkConfig } from "../config/network.config";
 
 const app = express();
@@ -78,7 +78,9 @@ const initDatabase = async () => {
 
 const startServer = async () => {
     try {
+        await ensureDatabaseExists();   // 🔥 NEW
         await testDatabaseConnection();
+
         console.log("Connected to PostgreSQL");
 
         await initDatabase();

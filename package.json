@@ -1,6 +1,11 @@
 {
-  "dependencies": {
-    "express": "^5.2.1",
-    "socket.io": "^4.8.3"
+  "name": "gymbuddy-root",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install --prefix Backend && npm install --prefix GymBuddy",
+    "dev": "concurrently \"npm run dev --prefix Backend\" \"npm start --prefix GymBuddy\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
   }
 }
