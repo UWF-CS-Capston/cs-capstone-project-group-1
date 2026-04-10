@@ -22,7 +22,7 @@ export const NetworkConfig = {
   PHONE_IP: '192.168.1.162',
   
   // Backend API Server Port
-  API_PORT: 5000,
+  API_PORT: 5001,
   
   // Expo Dev Server Port
   EXPO_DEV_PORT: 8081,
