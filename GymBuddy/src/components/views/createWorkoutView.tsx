@@ -26,9 +26,9 @@ export default function CreateWorkoutView({children}: {children: React.ReactNode
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        
         justifyContent: 'flex-start',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         backgroundColor: '#06b690',
         margin: 20,
         borderColor: '#09eba3',

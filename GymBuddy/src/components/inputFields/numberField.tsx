@@ -15,12 +15,12 @@ export default function NumberField({ placeholder, value, onChange }: NumberFiel
             onChangeText={onChange}
             keyboardType="numeric"
             style={{
-                width: 300,
+                width: 200,
                 padding: 15,
                 borderWidth: 1,
                 borderColor: '#09eba3',
                 borderRadius: 15,
-                marginBottom: 15,
+                margin: 10,
                 backgroundColor: '#09eba3',
                 color: '#055c49',
             }}
