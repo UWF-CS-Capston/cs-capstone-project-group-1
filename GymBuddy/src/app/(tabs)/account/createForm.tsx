@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import FormField from '../../../components/inputFields/inputField';
 import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
 import { router } from 'expo-router';
 import MainView from '../../../components/views/mainView';
 import { apiFetch } from '../../../utils/api';
+import HeaderText from '../../../components/texts/headerText';
 
 export default function CreateForm() {
     const [email, setEmail] = React.useState("");
@@ -42,27 +43,19 @@ export default function CreateForm() {
     return (
         <MainView>
             <FormView>
-                <Text style={styles.header}>Create Account</Text>
+                <HeaderText>Create Account</HeaderText>
                 <FormField placeholder="Email" value={email} onChange={setEmail} />
                 <FormField placeholder="Name" value={name} onChange={setName} />   
                 <FormField placeholder="Password" value={password} onChange={setPassword} secureTextEntry />
                 <FormField placeholder="Confirm Password" value={confirmPassword} onChange={setConfirmPassword} secureTextEntry />
-                <View style ={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
-                    <FormButton title="Back to Login" onPress={() =>
+                <View style ={{ flexDirection: 'row', justifyContent: 'center'}}>
+                    <FormButton title="Go Back" onPress={() =>
                         router.replace('/account/loginForm')
                     } />
-                    <FormButton title="Create Account" onPress={handleCreateAccount} />
+                    <FormButton title="Create" onPress={handleCreateAccount} />
                 </View>
                 <Text style={{ marginTop: 20 }}>{message}</Text>
             </FormView>
         </MainView>
     )
 }  
-
-const styles = StyleSheet.create({
-    header: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 10,
-    },
-});

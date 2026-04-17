@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
     button: {
         width: 200,
         padding: 10,
-        borderWidth: 1,
-        borderColor: '#09eba3',
-        borderRadius: 15,
-        backgroundColor: '#09eba3',
-        margin: 5,
+        borderWidth: 3,
+        borderColor: '#009e6c',
+        borderRadius: 5,
+        backgroundColor: '#ffffff',
+        marginLeft: 10,
+        marginTop: 5,
     },
     buttonText: {
         color: '#055c49',

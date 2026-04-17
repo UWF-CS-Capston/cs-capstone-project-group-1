@@ -16,13 +16,17 @@ export default function NumberField({ placeholder, value, onChange }: NumberFiel
             keyboardType="numeric"
             style={{
                 width: 200,
-                padding: 15,
-                borderWidth: 1,
-                borderColor: '#09eba3',
-                borderRadius: 15,
-                margin: 10,
-                backgroundColor: '#09eba3',
+                padding: 10,
+                borderWidth: 3,
+                borderColor: '#009e6c',
+                borderRadius: 5,
+                marginLeft: 10,
+                marginBottom: 5,
+                marginTop: 5,
+                marginRight: 10,
+                backgroundColor: '#ffffff',
                 color: '#055c49',
+                textDecorationColor: '#055c49',
             }}
         />
     );

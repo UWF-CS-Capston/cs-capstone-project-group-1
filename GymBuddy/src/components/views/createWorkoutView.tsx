@@ -28,17 +28,10 @@ const styles = StyleSheet.create({
     container: {
         
         justifyContent: 'flex-start',
-        alignItems: 'flex-end',
-        backgroundColor: '#06b690',
+        alignItems: 'flex-start',
+        backgroundColor: '#f7f6f6',
         margin: 20,
-        borderColor: '#09eba3',
-        borderWidth: 2,
-        borderRadius: 10,
         padding: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 5, height: 7 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
     },
+
 })

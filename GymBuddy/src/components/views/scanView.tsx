@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-export default function FormView({ children }: { children: React.ReactNode }) {
+export default function ScanView({ children }: { children: React.ReactNode }) {
     return (
         <View style={styles.container}>
             {children}
@@ -11,12 +11,10 @@ export default function FormView({ children }: { children: React.ReactNode }) {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#f7f6f6',
-        marginRight: 10,
-        marginBottom: 10,
-        borderColor: '#009e6c',
-        padding: 5,
+        
     },
 })

@@ -10,6 +10,7 @@ export default function RootLayout() {
             tabBarActiveTintColor: '#fff',
             tabBarInactiveTintColor: '#fff',
             tabBarLabelStyle: { fontSize: 24 },
+            tabBarShowLabel: false,
         }}>
             <Tabs.Screen name="machinePage" options={{
                 title: "Machines",
