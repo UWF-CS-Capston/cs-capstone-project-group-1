@@ -14,6 +14,7 @@ import MachineView from "../../../../components/views/machineView";
 import { router } from "expo-router";
 import { apiFetch } from "../../../../utils/api";
 import storage from "../../../../utils/storage";
+import HeaderText from "../../../../components/texts/headerText";
 
 type MachineSummary = {
     id: number;
@@ -55,6 +56,43 @@ type MachineDetails = {
         active_seconds: number;
         started_at: string | null;
     } | null;
+};
+
+const mockMachineDetails: MachineDetails = {
+    machine: {
+        id: 1,
+        name: "Treadmill 1",
+    },
+    activeUser: {
+        user_id: 2,
+        email: "user@email.com",
+        started_at: new Date().toISOString(),
+        active_seconds: 120,
+    },
+    queue: [
+        {
+            user_id: 3,
+            email: "user2@email.com",
+            joined_at: new Date().toISOString(),
+            wait_seconds: 30,
+            position: 1,
+        },
+        {
+            user_id: 4,
+            email: "user3@email.com",
+            joined_at: new Date().toISOString(),
+            wait_seconds: 10,
+            position: 2,
+        },
+    ],
+    currentUserQueue: {
+        user_id: 1,
+        email: "user1@email.com",
+        joined_at: new Date().toISOString(),
+        wait_seconds: 45,
+        position: 1,
+    },
+    currentUserUsing: null,
 };
 
 const formatDuration = (seconds: number) => {
@@ -298,6 +336,8 @@ export default function MachinePage() {
 
     return (
         <MainView>
+            <HeaderText>Gym Machines</HeaderText>
+
             <Text style={styles.pageTitle}>
                 Select a machine to view details and manage your queue position.
             </Text>
@@ -324,12 +364,14 @@ export default function MachinePage() {
                     );
                 })}
             </View>
-            <NavButton
-                title="Return Gym Page"
-                onPress={() => {
-                    router.dismiss();
-                }}
-            />
+            <View style={{ marginTop: 20, marginLeft: 20 }}>
+                <NavButton
+                    title="Return Gym Page"
+                    onPress={() => {
+                        router.dismiss();
+                    }}
+                />
+            </View>
 
             <Modal
                 animationType="slide"
@@ -448,11 +490,14 @@ const styles = StyleSheet.create({
         width: "100%",
         maxWidth: 680,
         maxHeight: "85%",
-        backgroundColor: "#09dcb0",
+        backgroundColor: "#ffffff",
         borderRadius: 18,
-        borderWidth: 2,
-        borderColor: "#0ef0bf",
-        padding: 20,
+        borderWidth: 3,
+        borderColor: "#009e6c",
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     modalContent: {
         paddingBottom: 10,
@@ -468,6 +513,9 @@ const styles = StyleSheet.create({
         color: "#055c49",
         marginBottom: 16,
         textAlign: "center",
+        borderBottomWidth: 1,
+        borderBottomColor: "#009e6c",
+        paddingBottom: 8,
     },
     sectionTitle: {
         fontSize: 20,

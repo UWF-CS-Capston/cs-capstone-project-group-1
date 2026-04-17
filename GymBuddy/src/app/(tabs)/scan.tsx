@@ -5,12 +5,13 @@ import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { router } from 'expo-router';
 import FormButton from '../../components/buttons/formButtons';
+import ScanView from '../../components/views/scanView';
 
 export default function Scan() {
     const { token } = useAuth();
 
     return (
-        <MainView>
+        <ScanView>
             {token ? (
                 <Index />
             ) : (
@@ -21,6 +22,6 @@ export default function Scan() {
                     <FormButton title="Go to Login" onPress={() => router.push('/account/loginForm')} />
                 </View>
             )}
-        </MainView>
+        </ScanView>
     );
 }

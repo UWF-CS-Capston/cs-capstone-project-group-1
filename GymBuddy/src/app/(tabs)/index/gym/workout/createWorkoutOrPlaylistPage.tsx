@@ -11,6 +11,7 @@ import WorkoutView from "../../../../../components/views/workoutView";
 import CreateWorkoutView from "../../../../../components/views/createWorkoutView";
 import NumberField from "../../../../../components/inputFields/numberField";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import HeaderText from "../../../../../components/texts/headerText";
 
 type Workout = {
     id: string;
@@ -158,27 +159,29 @@ export default function CreateWorkoutOrPlaylistPage() {
     }
 
     return (
-        <MainView>
+        <View>
             <View style={{ padding: 20, flexDirection: 'row', justifyContent: 'center' }}>
                 <NavButton title="Create Workout" onPress={handleCreateWorkout} />
                 <NavButton title="Create Playlist" onPress={handleCreatePlaylist} />
             </View>
             {createWorkout && (
                 <CreateWorkoutView>
-                    <Text style={styles.header}>Create Workout</Text>
+                    <HeaderText>Create Workout</HeaderText>
 
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Workout Name</Text>
+                        
                         <FormField placeholder="Name" value={workoutName} onChange={setWorkoutName} />
+                        <Text style={styles.fieldTitle}>Workout Name</Text>
                     </View>
 
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Description</Text>
+                        
                         <FormField placeholder="Description" value={description} onChange={setDescription} />
+                        <Text style={styles.fieldTitle}>Description</Text>
                     </View>
 
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Reps</Text>
+                        
                         <NumberField placeholder="Reps" value={String(reps)} onChange={(value) => {
                             try {
                                 const numericValue = Number(value);
@@ -191,16 +194,17 @@ export default function CreateWorkoutOrPlaylistPage() {
                                 console.error('Error parsing number input:', error);
                             }
                             } }
-                            />
+                        />
+                        <Text style={styles.fieldTitle}>Reps</Text>
                     </View>
 
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Machine</Text>
                         <FormField placeholder="Machine" value={machine} onChange={setMachine} />
+                        <Text style={styles.fieldTitle}>Machine</Text>
                     </View>
                     
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Sets</Text>
+                       
                         <NumberField placeholder="Sets" value={String(sets)} onChange={(value) => {
                             try {
                                 const numericValue = Number(value);
@@ -212,11 +216,13 @@ export default function CreateWorkoutOrPlaylistPage() {
                             } catch (error) {
                                 console.error('Error parsing number input:', error);
                             }
+                            
                         }} />
+                        <Text style={styles.fieldTitle}>Sets</Text>
                     </View>
 
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Weight</Text>
+                        
                         <NumberField placeholder="Weight" value={String(weight)} onChange={(value) => {
                             try {
                                 const numericValue = Number(value);
@@ -228,11 +234,13 @@ export default function CreateWorkoutOrPlaylistPage() {
                             } catch (error) {
                                 console.error('Error parsing number input:', error);
                             }
+                            
                         }} />
+                        <Text style={styles.fieldTitle}>Weight</Text>
                     </View>
 
                     <View style={styles.fieldRow}>
-                        <Text style={styles.fieldTitle}>Duration (seconds)</Text>
+                        
                         <NumberField placeholder="Duration" value={String(duration)} onChange={(value) => {
                             try {
                                 const numericValue = Number(value);
@@ -245,6 +253,7 @@ export default function CreateWorkoutOrPlaylistPage() {
                                 console.error('Error parsing number input:', error);
                             }
                         }} />
+                        <Text style={styles.fieldTitle}>Duration (seconds)</Text>
                     </View>
 
                     <View style={styles.fieldRow}>
@@ -258,7 +267,7 @@ export default function CreateWorkoutOrPlaylistPage() {
 
             {createPlaylist && (
                 <CreateWorkoutView>
-                    <Text style={styles.header}>Create Playlist</Text>
+                    <HeaderText>Create Playlist</HeaderText>
 
                     <View style={styles.fieldRow}>
                         <Text style={styles.fieldTitle}>Playlist Name</Text>
@@ -319,7 +328,7 @@ export default function CreateWorkoutOrPlaylistPage() {
                     </View>
                 </CreateWorkoutView>
             )}
-        </MainView>
+        </View>
     );
 
     

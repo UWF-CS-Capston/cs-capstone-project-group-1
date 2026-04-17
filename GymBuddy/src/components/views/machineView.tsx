@@ -64,12 +64,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         width: 210,
         minHeight: 230,
-        backgroundColor: '#06b690',
+        backgroundColor: '#ffffff',
         margin: 10,
-        borderColor: '#09eba3',
-        borderWidth: 2,
-        borderRadius: 10,
-        padding: 16,
+        borderColor: '#009e6c',
+        borderWidth: 3,
+        borderRadius: 5,
+        paddingTop: 12,
+        paddingBottom: 12,
+        paddingLeft: 20,
+        paddingRight: 20,
         shadowColor: '#000',
         shadowOffset: { width: 5, height: 7 },
         shadowOpacity: 0.25,
@@ -77,13 +80,25 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     joinButton: {
-    backgroundColor: '#0ee0b1', // green 
-    borderColor: '#0ee0b1',
+        backgroundColor: '#0ee0b1', // green 
+        borderColor: '#0ee0b1',
+        borderWidth: 3,
+        borderRadius: 5,
+        margin: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
     },
 
     leaveButton: {
         backgroundColor: '#e74c3c', // red
         borderColor: '#111111',
+        borderWidth: 3,
+        borderRadius: 5,
+        margin: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
     },
     buttonRow: {
         flexDirection: 'row',
@@ -114,6 +129,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         marginBottom: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#009e6c',
+        paddingBottom: 4,
     },
     descriptionText: {
         color: '#055c49',

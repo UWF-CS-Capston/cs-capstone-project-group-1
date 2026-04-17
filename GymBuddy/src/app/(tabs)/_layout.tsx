@@ -18,9 +18,9 @@ export default function RootLayout() {
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
-                tabBarActiveTintColor: '#09eba3',
-                tabBarInactiveTintColor: '#fff',
-                tabBarStyle: { backgroundColor: '#055c49' },
+                tabBarActiveTintColor: '#08ffb1',
+                tabBarInactiveTintColor: '#ececec',
+                tabBarStyle: { backgroundColor: '#02ac87' },
                 tabBarPosition: 'bottom',
                 tabBarHideOnKeyboard: true,
                 tabBarAllowFontScaling: true,

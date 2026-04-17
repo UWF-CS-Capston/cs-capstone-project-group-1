@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import FormField from '../../../components/inputFields/inputField';
 import FormButton from '../../../components/buttons/formButtons';
 import FormView from '../../../components/views/formView';
@@ -7,6 +7,7 @@ import { router } from 'expo-router';
 import MainView from '../../../components/views/mainView';
 import { useAuth } from '../../../contexts/AuthContext';
 import { apiFetch } from '../../../utils/api';
+import HeaderText from '../../../components/texts/headerText';
 
 export default function LoginForm() {
     const [email, setEmail] = React.useState("");
@@ -38,7 +39,7 @@ export default function LoginForm() {
     return (
         <MainView>
             <FormView>
-                <Text style={styles.header}>Login</Text>
+                <HeaderText>Login</HeaderText>
                 <FormField placeholder="Email" value={email} onChange={setEmail} />
                 <FormField placeholder="Password" value={password} onChange={setPassword} secureTextEntry />
                 <View style ={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
@@ -50,11 +51,3 @@ export default function LoginForm() {
         </MainView>
     );
 }
-
-const styles = StyleSheet.create({
-    header: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 10,
-    },
-});

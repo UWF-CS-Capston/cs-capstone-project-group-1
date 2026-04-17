@@ -3,6 +3,8 @@ import { router } from "expo-router";
 import MainView from "../../../components/views/mainView";
 import NavButton from "../../../components/buttons/navButton";
 import GymView from "../../../components/views/gymView";
+import HeaderText from "../../../components/texts/headerText";
+import ParagraphText from "../../../components/texts/paragraphText";
 import { useAuth } from "../../../contexts/AuthContext";
 
 const mockGymData = {
@@ -31,28 +33,28 @@ export default function Index() {
     if (!isLoggedIn) {
         return (
             <MainView>
-                <View style={{ padding: 20, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 28, fontWeight: 'bold', textAlign: "center", marginTop: 20, marginBottom: 20 }}>
-                        Welcome to GymBuddy!
-                    </Text>
-                    
-                    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 15, lineHeight: 24 }}>
-                        Track gym occupancy in real-time and plan your workout when it's least crowded.
-                    </Text>
-                    
-                    <Text style={{ fontSize: 16, textAlign: "center", marginBottom: 15, lineHeight: 24 }}>
-                        🏋️ Check live gym capacity{'\n'}
-                        📱 Get your personal QR code{'\n'}
-                        ⏰ Find the best time to visit
-                    </Text>
-                    
-                    <View style={{ marginTop: 20 }}>
-                        <NavButton 
-                            title="Login to Get Started" 
-                            onPress={() => router.push('/(tabs)/account/loginForm')} 
-                        />
-                    </View>
+                <HeaderText>
+                    Welcome to GymBuddy!
+                </HeaderText>
+                
+                <ParagraphText>
+                    The best gym management app designed to create a better gym experience for workout enthusiasts and gym owners alike.
+                </ParagraphText>
+
+                
+
+                <View style={{ marginTop: 20, marginBottom: 20, marginLeft: 35 }}>
+                    <NavButton 
+                        title="Login to Get Started" 
+                        onPress={() => router.push('/gym')} //temporary redirect to gym page for testing purposes, change to login form when implemented
+                        //onPress={() => router.push('/(tabs)/account/loginForm')} 
+                    />
                 </View>
+                
+                <ParagraphText>
+                    GymBuddy provides users with real-time gym occupancy, allowing customers to plan their workouts at the most optimal times and gym owners to manager their facilites 
+                    more efficiently.
+                </ParagraphText>
             </MainView>
         );
     }
@@ -60,9 +62,9 @@ export default function Index() {
         // Logged-in user view
         return (
             <MainView>
-                <Text style={{ fontSize: 20, textAlign: "center", marginTop: 40 }}>
+                <HeaderText>
                     Welcome back to GymBuddy!
-                </Text>
+                </HeaderText>
                 
                 <View style={{ marginTop: 20 }}>
                     <GymView 
