@@ -1,36 +1,36 @@
+/**
+ * Network Configuration for GymBuddy
+ * This imports from the shared config which is the SINGLE SOURCE OF TRUTH
+ */
+
+// Import shared config (CommonJS)
+const sharedConfig = require('./shared.config.js');
+
 const DATABASE_HOST =
   process.env.PGHOST ||
   process.env.DATABASE_HOST ||
-  "localhost";
+  'localhost';
 
 export const NetworkConfig = {
-  // Developer Machine IP Address
-  // TODO: Update this with your computer's local IP address (e.g., from ipconfig/ifconfig)
-  COMPUTER_IP: '192.168.1.68',
-  
-  // Phone/Mobile Device IP Address (if testing on physical device)
-  // TODO: Update this with your phone's local IP address
-  PHONE_IP: '192.168.1.162',
-  
-  // Backend API Server Port
-  API_PORT: 5000,
-  
-  // Expo Dev Server Port
-  EXPO_DEV_PORT: 8081,
+  // All values are imported from shared.config.js - the single source of truth
+  COMPUTER_IP: sharedConfig.COMPUTER_IP,
+  PHONE_IP: sharedConfig.PHONE_IP,
+  API_PORT: sharedConfig.API_PORT,
+  EXPO_DEV_PORT: sharedConfig.EXPO_DEV_PORT,
 
   CORS_ORIGINS: [
-    "http://localhost:8081",
-    "http://localhost:19006",
-    "http://172.19.80.1:8081",
-    "http://172.19.80.1:19006",
+    'http://localhost:8081',
+    'http://localhost:19006',
+    `http://${sharedConfig.COMPUTER_IP}:${sharedConfig.EXPO_DEV_PORT}`,
+    `http://${sharedConfig.COMPUTER_IP}:${sharedConfig.WEB_PORT}`,
   ],
 
   DATABASE: {
     HOST: DATABASE_HOST,
-    PORT: 5000,
-    USER: "postgres",
-    PASSWORD: "postgres",
-    DATABASE: "gymbuddy",
+    PORT: sharedConfig.DATABASE_PORT,
+    USER: 'postgres',
+    PASSWORD: 'postgres',
+    DATABASE: 'gymbuddy',
   },
 } as const;
 

@@ -7,7 +7,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "../GymBuddy/src/actions"
+    "rootDir": "../GymBuddy/src/actions",
+    "types": ["node"]
   },
   "include": ["../GymBuddy/src/actions/**/*"],
   "exclude": ["node_modules"]

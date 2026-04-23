@@ -3,6 +3,7 @@
     "name": "GymBuddy",
     "slug": "GymBuddy",
     "version": "1.0.0",
+    "scheme": "exp://192.168.1.183:8081",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
